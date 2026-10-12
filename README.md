@@ -27,8 +27,14 @@ $$
 P_{\mathrm{logical}} = 3p^2(1-p)+p^3
 $$
 
+
 Simplifying gives
 
+$$
+P_{\mathrm{logical}} = 3p^2 - 2p^3
+$$
+
+where $p$ is the physical bit-flip probability. A logical failure occurs when two or more of the three physical qubits experience bit flips.
 $$
 P_{\mathrm{logical}} = 3p^2 - 2p^3,
 $$
