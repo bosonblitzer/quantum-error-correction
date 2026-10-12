@@ -17,26 +17,28 @@ The logical computational basis is encoded as
 $$
 |0_L\rangle = |000\rangle,\qquad |1_L\rangle = |111\rangle.
 $$
+
 The code protects against independent bit-flip errors by encoding one logical bit across three physical qubits. The two parity checks are
 
 $$
 s_1 = e_1 \oplus e_2,\qquad s_2 = e_2 \oplus e_3,
 $$
 
-where $e_i \in \{0,1\}$ indicates whether physical qubit $i$ experienced a bit flip, and $\oplus$ denotes exclusive OR.
+where $e_i \in \{0,1\}$ indicates whether physical qubit $i$ experienced a bit flip, and $\oplus$  denotes exclusive OR.
 
-The decoder identifies the most likely single-qubit error consistent with the observed syndrome, assuming independent bit flips with probability \(p<0.5\).
+The decoder identifies the most likely single-qubit error consistent with the observed syndrome, assuming independent bit flips with probability \(p < 0.5\).
 
-A logical error occurs when at least two of the three physical qubits experience bit flips. The probability of this event is
+A logical error occurs when at least two of the three physical qubits experience bit flips. The theoretical logical failure probability is therefore
 
 $$
 \begin{aligned}
-P_L &= \binom{3}{2}p^2(1-p)+p^3\\
-    &= 3p^2-2p^3.
+P_{\mathrm{logical}}
+&= \binom{3}{2}p^2(1-p)+p^3\\
+&= 3p^2-2p^3.
 \end{aligned}
 $$
 
-For \(0<p<0.5\), this theoretical logical error probability is lower than the physical error probability \(p\).
+For \(0 < p < 0.5\), this theoretical logical error probability is lower than the physical error probability \(p\).
 
 ## 3. Methodology
 
@@ -47,14 +49,33 @@ Six physical error probabilities are investigated: 0.01, 0.03, 0.05, 0.10, 0.15 
 The estimated logical error rate is the number of logical failures divided by the number of trials. A Wilson 95% confidence interval is calculated for each estimate. Results, including theoretical predictions and error-reduction metrics, are exported to CSV. A plotting script visualises the simulated and theoretical error rates alongside the uncorrected physical error-rate baseline.
 
 ## 4. Results
+
+The simulation was run for 100,000 Monte Carlo trials at each of six physical bit-flip probabilities. Table 1 compares the simulated logical error rates with their theoretical predictions and reports the 95% Wilson confidence intervals.
+
+**Table 1. Monte Carlo results for the three-qubit repetition code.**
+
+| Physical error probability, \(p\) | Logical failures | Simulated logical error rate | 95% confidence interval | Theoretical logical error rate | Error reduction |
+|---:|---:|---:|---:|---:|---:|
+| 0.01 | 31 | 0.00031 | [0.00022, 0.00044] | 0.000298 | 96.9% |
+| 0.03 | 266 | 0.00266 | [0.00236, 0.00300] | 0.002646 | 91.2% |
+| 0.05 | 761 | 0.00761 | [0.00709, 0.00817] | 0.007250 | 84.8% |
+| 0.10 | 2,742 | 0.02742 | [0.02643, 0.02845] | 0.028000 | 72.6% |
+| 0.15 | 6,103 | 0.06103 | [0.05956, 0.06253] | 0.060750 | 59.3% |
+| 0.20 | 10,633 | 0.10633 | [0.10443, 0.10826] | 0.104000 | 47.0% |
+
+*Note:* Error reduction is calculated relative to the measured physical error rate:
+
+$$
+1-\frac{P_{\mathrm{logical}}}{P_{\mathrm{physical}}}.
+$$
+
+Confidence intervals quantify sampling uncertainty in the simulated logical error rate.
+
 ![Simulated and theoretical logical error rates](results/logical_error_comparison.png)
-At a physical error probability of 0.10, the simulated logical error rate is 0.02742, compared with a theoretical prediction of 0.02800. The simulation therefore estimates a reduction in error probability of approximately 72.6% relative to the measured physical error rate.
 
-At a physical error probability of 0.15, the simulated logical error rate is 0.06103, compared with a theoretical value of 0.06075. The estimated relative error reduction is approximately 59.3%.
+The results show that the logical error rate increases with physical error probability, while the relative benefit of error correction decreases across the tested range. At \(p=0.01\), the simulation estimates a 96.9% reduction in error probability; at \(p=0.20\), the reduction is 47.0%.
 
-At a physical error probability of 0.20, the simulated logical error rate is 0.10633, compared with a theoretical value of 0.10400. The estimated relative error reduction is approximately 47.0%. The theoretical prediction falls slightly below the simulation's Wilson 95% confidence interval at this point, so the discrepancy warrants further investigation rather than being dismissed.
-
-Overall, the results indicate that the relative benefit of this repetition-code decoder decreases as the physical error probability increases across the tested range.
+At five of the six tested probabilities, the theoretical prediction lies within the corresponding 95% Wilson confidence interval. At \(p=0.20\), the theoretical value of 0.10400 falls slightly below the interval's lower bound of 0.10443. This discrepancy is worth investigating, although a single interval miss does not by itself establish an implementation error or invalidate the model.
 
 ## 5. Limitations
 
