@@ -31,19 +31,21 @@ $$
 Simplifying gives
 
 $$
-
 P_{\mathrm{logical}} = 3p^2 - 2p^3
-
 $$
 
 where $p$ is the physical bit-flip probability. A logical failure occurs when two or more of the three physical qubits experience bit flips.
-$$
 
-P_{\mathrm{logical}} = 3p^2 - 2p^3,
 
 $$
-where \(p\) is the physical bit-flip probability.
+
+
+$$
 ## Methodology
+
+
+
+
 
 1. **Noise model:** Sample independent bit-flip errors for three physical qubits using NumPy.
 2. **Syndrome calculation:** Compute two parity checks to identify the error syndrome.
